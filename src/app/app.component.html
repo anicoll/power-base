@@ -1,21 +1,11 @@
-
 <main class="main">
   <div class="content">
-      <h1>Hello, {{ title }}</h1>
-      <br />
-      <app-inverter> </app-inverter>
-      <br />
-      <app-battery-bar-chart> </app-battery-bar-chart>
-      
+    <h1>Hello, {{ title }}</h1>
+    <br />
+    <app-inverter [data]="data"> </app-inverter>
+    <br />
+    <app-battery-bar-chart [data]="data"> </app-battery-bar-chart>
+
   </div>
 </main>
-
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced.  * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * End of Placeholder  * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-
 <router-outlet />

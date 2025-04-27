@@ -2,7 +2,8 @@ import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { BatteryBarChartComponent } from "./battery/battery-bar-chart.component";
 import { InverterComponent } from "./inverter/inverter.component";
-import { HttpClient } from '@angular/common/http';
+import { DataService } from './shared/data.service';
+
 
 @Component({
   selector: 'app-root',
@@ -12,13 +13,16 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AppComponent {
   title = 'Power Base';
+  data: any;
 
-  private http = inject(HttpClient);
 
-  constructor() {
-    this.getData();
+
+
+  constructor(private dataService: DataService) {
+    this.fetchData();
   }
-  getData() {
-    // this.http.get('https://jsonplaceholder.typicode.com/todos/1').subscribe((response) => console.log(response));
+  fetchData() {
+    this.data = this.dataService.getData();
+    console.log("retrieved data")
   }
 }
