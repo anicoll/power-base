@@ -8,9 +8,8 @@ describe('InverterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [InverterComponent]
-    })
-    .compileComponents();
+      imports: [InverterComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(InverterComponent);
     component = fixture.componentInstance;
