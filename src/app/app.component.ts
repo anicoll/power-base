@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { BatteryBarChartComponent } from './battery/battery-bar-chart.component';
+import {HomeUsageComponent} from "./home-usage/home-usage.component"
 import { InverterComponent } from './inverter/inverter.component';
 import { DataService } from './shared/data.service';
 import { interval, Observable, Subscription, switchMap } from 'rxjs';
@@ -8,7 +9,7 @@ import { Property } from './model/property.model';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, BatteryBarChartComponent, InverterComponent],
+  imports: [RouterOutlet, BatteryBarChartComponent, InverterComponent, HomeUsageComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
