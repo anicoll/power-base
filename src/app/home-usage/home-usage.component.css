@@ -32,32 +32,15 @@
   left: 50%;
   transform: translateX(-50%);
   font-size: 30px;
-  color: #ffd700; /* Yellow fill */
-  text-shadow: -2px -2px 0 #4b0082, 2px -2px 0 #4b0082, -2px 2px 0 #4b0082, 2px 2px 0 #4b0082; /* Purple outline */
+  color: #ffd700;
+  /* Yellow fill */
+  text-shadow:
+    -2px -2px 0 #4b0082,
+    2px -2px 0 #4b0082,
+    -2px 2px 0 #4b0082,
+    2px 2px 0 #4b0082;
+  /* Purple outline */
   animation: flicker 1.5s infinite;
-}
-
-.door {
-  position: absolute;
-  bottom: 5px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 20px;
-  height: 30px;
-  background: #f4d03f;
-  border: 1px solid #d4a017;
-  border-radius: 3px;
-}
-
-.window {
-  position: absolute;
-  top: 15px;
-  right: 10px;
-  width: 20px;
-  height: 20px;
-  background: #f4d03f;
-  border: 1px solid #d4a017;
-  border-radius: 3px;
 }
 
 .usage-text {
@@ -69,10 +52,12 @@
 }
 
 @keyframes flicker {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
     transform: translateX(-50%) scale(1);
   }
+
   50% {
     opacity: 0.7;
     transform: translateX(-50%) scale(1.05);

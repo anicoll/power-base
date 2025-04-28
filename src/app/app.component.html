@@ -4,9 +4,12 @@
     <br />
     <app-inverter [data]="data"> </app-inverter>
     <br />
-    <app-battery-bar-chart [data]="data"> </app-battery-bar-chart>
+    <app-battery-bar [data]="data"> </app-battery-bar>
     <br />
     <app-home-usage [data]="data"> </app-home-usage>
+    <br />
+    <app-gauge [data]="batterySoc"> </app-gauge>
+    <app-gauge [data]="batteryCharge"> </app-gauge>
   </div>
 </main>
 <router-outlet />

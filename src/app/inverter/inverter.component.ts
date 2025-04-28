@@ -16,7 +16,7 @@ export class InverterComponent {
   size: number = 100;
 
   ngOnChanges() {
-    console.log('Data received in BatteryBarChartComponent:', this.data);
+    console.log('Data received in BatteryBarChartComponent');
     var res = this.getInverterOutput(this.data);
     this.value = res[0];
     this.unit = res[1];

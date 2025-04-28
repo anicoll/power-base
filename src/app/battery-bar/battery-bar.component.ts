@@ -3,19 +3,19 @@ import { CommonModule } from '@angular/common';
 import { Property } from '../model/property.model';
 
 @Component({
-  selector: 'app-battery-bar-chart',
+  selector: 'app-battery-bar',
   imports: [CommonModule],
-  templateUrl: './battery-bar-chart.component.html',
-  styleUrl: './battery-bar-chart.component.css',
+  templateUrl: './battery-bar.component.html',
+  styleUrl: './battery-bar.component.css',
 })
-export class BatteryBarChartComponent {
+export class BatteryBarComponent {
   @Input() data: Array<Property> = [];
   percentage: number = 100;
 
   constructor() {}
 
   ngOnChanges() {
-    console.log('Data received in BatteryBarChartComponent:', this.data);
+    console.log('Data received in BatteryBarComponent');
     this.percentage = this.getBatteryPercentage(this.data);
   }
 

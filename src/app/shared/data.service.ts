@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subscription, interval } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
 import { Property } from '../model/property.model';
 
 @Injectable({
@@ -13,6 +12,8 @@ export class DataService {
   constructor(private http: HttpClient) {}
 
   getData(): Observable<Array<Property>> {
-    return this.http.get<Array<Property>>('http://localhost:8000/properties');
+    return this.http.get<Array<Property>>(
+      'http://192.168.10.18:8000/properties',
+    );
   }
 }
