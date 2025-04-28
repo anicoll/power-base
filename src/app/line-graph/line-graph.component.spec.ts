@@ -8,9 +8,8 @@ describe('LineGraphComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LineGraphComponent]
-    })
-    .compileComponents();
+      imports: [LineGraphComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(LineGraphComponent);
     component = fixture.componentInstance;

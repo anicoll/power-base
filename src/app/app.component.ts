@@ -113,9 +113,9 @@ export class AppComponent implements OnInit, OnDestroy {
     updatedGauge.gaugeLabel = 'Solar Generation';
     updatedGauge.gaugeAppendText = prop.unit_of_measurement;
     updatedGauge.gaugeThresholds = {
-      '0': { color: 'red', },
-      '40': { color: 'orange', },
-      '70': { color: 'green', },
+      '0': { color: 'red' },
+      '40': { color: 'orange' },
+      '70': { color: 'green' },
     };
     this.solarGeneration = updatedGauge;
   }

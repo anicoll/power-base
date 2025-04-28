@@ -1,48 +1,80 @@
-import { Component } from '@angular/core';
-import { ChartConfiguration, ChartOptions } from "chart.js";
-
+import { Component, ViewChild } from '@angular/core';
+import {
+  NgApexchartsModule,
+  ApexTitleSubtitle,
+  ApexAxisChartSeries,
+  ApexChart,
+  ChartComponent,
+  ApexDataLabels,
+  ApexYAxis,
+  ApexStroke,
+  ApexXAxis,
+  ApexTooltip,
+} from 'ng-apexcharts';
 
 @Component({
   selector: 'app-line-graph',
   standalone: true,
-
-  imports: [],
+  imports: [NgApexchartsModule],
   templateUrl: './line-graph.component.html',
-  styleUrl: './line-graph.component.css'
+  styleUrl: './line-graph.component.css',
 })
-
 export class LineGraphComponent {
-
-  public lineChartData: ChartConfiguration<'line'>['data'] = {
-    labels: [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July'
-    ],
-    datasets: [
-      {
-        data: [65, 59, 80, 81, 56, 55, 40],
-        label: 'Series A',
-        fill: true,
-        tension: 0,
-        borderColor: 'black',
-        backgroundColor: 'rgba(255,0,0,0.3)'
-      }
-    ]
+  @ViewChild('chart') chart!: ChartComponent;
+  public chartOptions: {
+    series: ApexAxisChartSeries;
+    chart: ApexChart;
+    xaxis: ApexXAxis;
+    stroke: ApexStroke;
+    tooltip: ApexTooltip;
+    dataLabels: ApexDataLabels;
+    title: ApexTitleSubtitle;
+    yaxis: ApexYAxis;
   };
-  public lineChartOptions: ChartOptions<'line'> = {
-    responsive: false
-  };
-  public lineChartLegend = true;
 
   constructor() {
+    this.chartOptions = {
+      yaxis: {},
+      chart: {
+        height: 350,
+        type: 'line',
+        toolbar: {
+          show: false,
+        },
+      },
+      series: [
+        {
+          name: 'Sample Data',
+          data: [30, 40, 35, 50, 49, 60, 70],
+        },
+      ],
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        curve: 'smooth',
+      },
+      xaxis: {
+        type: 'datetime',
+        categories: [
+          '2018-09-19T00:00:00.000Z',
+          '2018-09-19T01:30:00.000Z',
+          '2018-09-19T02:30:00.000Z',
+          '2018-09-19T03:30:00.000Z',
+          '2018-09-19T04:30:00.000Z',
+          '2018-09-19T05:30:00.000Z',
+          '2018-09-19T06:30:00.000Z',
+        ],
+      },
+      title: {
+        text: 'Line Graph',
+        align: 'left',
+      },
+      tooltip: {
+        x: {
+          format: 'dd/MM/yy HH:mm',
+        },
+      },
+    };
   }
-
-  ngOnInit() {
-  }
-
 }
