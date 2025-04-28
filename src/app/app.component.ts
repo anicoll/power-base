@@ -8,15 +8,18 @@ import { DataService } from './shared/data.service';
 import { interval, Observable, Subscription, switchMap } from 'rxjs';
 import { Property } from './model/property.model';
 import { Gauge } from './model/gauge.model';
+import { LineGraphComponent } from './line-graph/line-graph.component';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [
     RouterOutlet,
     BatteryBarComponent,
     InverterComponent,
     HomeUsageComponent,
     GaugeComponent,
+    LineGraphComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',

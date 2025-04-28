@@ -4,7 +4,6 @@ import { Property } from '../model/property.model';
 
 @Component({
   selector: 'app-inverter',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './inverter.component.html',
   styleUrl: './inverter.component.css',
