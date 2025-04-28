@@ -25,6 +25,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private pollingSubscription: Subscription | undefined;
   batterySoc: Gauge = new Gauge();
   batteryCharge: Gauge = new Gauge();
+  solarGeneration: Gauge = new Gauge();
   title = 'Power Base';
   data: Array<Property> = [];
 
@@ -44,12 +45,19 @@ export class AppComponent implements OnInit, OnDestroy {
         this.buildBatterySOCGauge(data[i]);
         continue;
       }
-      if (data[i].slug === 'battery_charging_power' || data[i].slug === 'battery_discharging_power') {
+      if (
+        data[i].slug === 'battery_charging_power' ||
+        data[i].slug === 'battery_discharging_power'
+      ) {
         batteryChargeProps.push(data[i]);
         if (batteryChargeProps.length === 2) {
           this.buildBatteryChargeGauge(batteryChargeProps);
-          continue
+          continue;
         }
+        continue;
+      }
+      if (data[i].slug === 'total_dc_power') {
+        this.buildSolarGeneration(data[i]);
         continue;
       }
     }
@@ -78,18 +86,35 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   buildBatterySOCGauge(prop: Property): void {
-    const updatedbatterySoc = new Gauge();
-    updatedbatterySoc.gaugeType = 'full';
-    updatedbatterySoc.gaugeValue = parseFloat(prop.value);
-    updatedbatterySoc.gaugeMin = 0;
-    updatedbatterySoc.gaugeMax = 100;
-    updatedbatterySoc.gaugeLabel = 'Battery SOC %';
-    updatedbatterySoc.gaugeThresholds = {
+    const updatedGauge = new Gauge();
+    updatedGauge.gaugeType = 'full';
+    updatedGauge.gaugeValue = parseFloat(prop.value);
+    updatedGauge.gaugeMin = 0;
+    updatedGauge.gaugeMax = 100;
+    updatedGauge.gaugeLabel = 'Battery SOC';
+    updatedGauge.gaugeAppendText = prop.unit_of_measurement;
+    updatedGauge.gaugeThresholds = {
       '0': { color: 'red', bgOpacity: 0.3 },
       '40': { color: 'orange', bgOpacity: 0.3 },
       '70': { color: 'green', bgOpacity: 0.3 },
     };
-    this.batterySoc = updatedbatterySoc;
+    this.batterySoc = updatedGauge;
+  }
+
+  buildSolarGeneration(prop: Property): void {
+    const updatedGauge = new Gauge();
+    updatedGauge.gaugeType = 'semi';
+    updatedGauge.gaugeValue = parseFloat(prop.value);
+    updatedGauge.gaugeMin = 0;
+    updatedGauge.gaugeMax = 7;
+    updatedGauge.gaugeLabel = 'Solar Generation';
+    updatedGauge.gaugeAppendText = prop.unit_of_measurement;
+    updatedGauge.gaugeThresholds = {
+      '0': { color: 'red', },
+      '40': { color: 'orange', },
+      '70': { color: 'green', },
+    };
+    this.solarGeneration = updatedGauge;
   }
 
   buildBatteryChargeGauge(props: Array<Property>): void {
@@ -97,9 +122,8 @@ export class AppComponent implements OnInit, OnDestroy {
     for (let i = 0; i < props.length; i++) {
       var v = props[i].value;
       if (props[i].slug === 'battery_discharging_power') {
-        updatedGauge.gaugeValue += (-1 * parseFloat(props[i].value));
-      } else
-        updatedGauge.gaugeValue += parseFloat(props[i].value);
+        updatedGauge.gaugeValue += -1 * parseFloat(props[i].value);
+      } else updatedGauge.gaugeValue += parseFloat(props[i].value);
     }
 
     updatedGauge.gaugeType = 'semi';
@@ -118,4 +142,3 @@ export class AppComponent implements OnInit, OnDestroy {
     this.batteryCharge = updatedGauge;
   }
 }
-
