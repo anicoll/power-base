@@ -2,17 +2,17 @@
   <div class="content">
     <h1>Hello, {{ title }}</h1>
     <br />
-    <app-inverter [data]="data"> </app-inverter>
+    <app-inverter [data]="properties"> </app-inverter>
     <br />
-    <app-battery-bar [data]="data"> </app-battery-bar>
+    <app-battery-bar [data]="properties"> </app-battery-bar>
     <br />
-    <app-home-usage [data]="data"> </app-home-usage>
+    <app-home-usage [data]="properties"> </app-home-usage>
     <br />
     <app-gauge [data]="batterySoc"> </app-gauge>
     <app-gauge [data]="batteryCharge"> </app-gauge>
     <app-gauge [data]="solarGeneration"> </app-gauge>
 
-    <app-line-graph> </app-line-graph>
+    <app-line-graph [data]="priceGraph"> </app-line-graph>
   </div>
 </main>
 <router-outlet />

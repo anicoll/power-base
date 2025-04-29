@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import {
   NgApexchartsModule,
   ApexTitleSubtitle,
@@ -11,6 +11,7 @@ import {
   ApexXAxis,
   ApexTooltip,
 } from 'ng-apexcharts';
+import { LineGraph } from '../model/line-graph.model';
 
 @Component({
   selector: 'app-line-graph',
@@ -19,8 +20,11 @@ import {
   templateUrl: './line-graph.component.html',
   styleUrl: './line-graph.component.css',
 })
-export class LineGraphComponent {
+
+export class LineGraphComponent implements OnChanges {
+  @Input() data: LineGraph = new LineGraph();
   @ViewChild('chart') chart!: ChartComponent;
+
   public chartOptions: {
     series: ApexAxisChartSeries;
     chart: ApexChart;
@@ -33,48 +37,54 @@ export class LineGraphComponent {
   };
 
   constructor() {
-    this.chartOptions = {
-      yaxis: {},
-      chart: {
-        height: 350,
-        type: 'line',
-        toolbar: {
-          show: false,
-        },
-      },
-      series: [
-        {
-          name: 'Sample Data',
-          data: [30, 40, 35, 50, 49, 60, 70],
-        },
-      ],
-      dataLabels: {
-        enabled: false,
-      },
-      stroke: {
-        curve: 'smooth',
-      },
-      xaxis: {
-        type: 'datetime',
-        categories: [
-          '2018-09-19T00:00:00.000Z',
-          '2018-09-19T01:30:00.000Z',
-          '2018-09-19T02:30:00.000Z',
-          '2018-09-19T03:30:00.000Z',
-          '2018-09-19T04:30:00.000Z',
-          '2018-09-19T05:30:00.000Z',
-          '2018-09-19T06:30:00.000Z',
-        ],
-      },
-      title: {
-        text: 'Line Graph',
-        align: 'left',
-      },
-      tooltip: {
-        x: {
-          format: 'dd/MM/yy HH:mm',
-        },
-      },
-    };
+    this.chartOptions = newChartOptions(this.data);
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log('Data received in LineGraphComponent', changes['data']);
+    if (changes['data'] && changes['data'].currentValue) {
+      const newData = changes['data'].currentValue;
+      this.chartOptions = newChartOptions(newData);
+    }
+  }
+}
+
+
+function newChartOptions(data: LineGraph): {
+  series: ApexAxisChartSeries;
+  chart: ApexChart;
+  xaxis: ApexXAxis;
+  stroke: ApexStroke;
+  tooltip: ApexTooltip;
+  dataLabels: ApexDataLabels;
+  title: ApexTitleSubtitle;
+  yaxis: ApexYAxis;
+} {
+  return {
+    yaxis: {},
+    chart: {
+      height: 350,
+      type: data.type,
+      toolbar: {
+        show: false,
+      },
+    },
+    series: data.series,
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      curve: 'smooth',
+    },
+    xaxis: data.xaxis,
+    title: {
+      text: data.title,
+      align: 'left',
+    },
+    tooltip: {
+      x: {
+        format: 'dd/MM/yy HH:mm',
+      },
+    },
+  };
 }

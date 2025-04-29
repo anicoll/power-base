@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { formatDate } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { BatteryBarComponent } from './battery-bar/battery-bar.component';
 import { GaugeComponent } from './gauge/gauge.component';
@@ -9,6 +10,17 @@ import { interval, Observable, Subscription, switchMap } from 'rxjs';
 import { Property } from './model/property.model';
 import { Gauge } from './model/gauge.model';
 import { LineGraphComponent } from './line-graph/line-graph.component';
+import { AmberPrice } from './model/amber.model';
+import { LineGraph } from './model/line-graph.model';
+
+function getTimeString(days: number = 0): string {
+  const date = new Date();
+  if (days !== 0) {
+    date.setDate(date.getDate() + days);
+  }
+
+  return formatDate(date, "yyyy-MM-dd'T'HH:mm:ss'Z'", 'en-AU', 'UTC');
+}
 
 @Component({
   selector: 'app-root',
@@ -25,19 +37,30 @@ import { LineGraphComponent } from './line-graph/line-graph.component';
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit, OnDestroy {
-  private pollingSubscription: Subscription | undefined;
+  private inverterSub: Subscription | undefined;
+  private pricesSub: Subscription | undefined;
   batterySoc: Gauge = new Gauge();
   batteryCharge: Gauge = new Gauge();
   solarGeneration: Gauge = new Gauge();
+  priceGraph: LineGraph = new LineGraph();
   title = 'Power Base';
-  data: Array<Property> = [];
+  properties: Array<Property> = [];
+  amberPrices: Array<any> = [];
 
   constructor(private dataService: DataService) {
-    dataService.getData().subscribe({
+    this.fetchInverterData().subscribe({
       next: (data) => {
-        this.data = data;
-        this.setupGauges(this.data);
+        this.properties = data;
+        this.setupGauges(data);
       },
+      error: (err) => console.error('Error fetching properties:', err),
+    });
+    this.fetchAmberPrices().subscribe({
+      next: (data) => {
+        this.amberPrices = data;
+        this.priceGraph = buildLineGraphPrices(data)
+      },
+      error: (err) => console.error('Error fetching amber prices:', err),
     });
   }
 
@@ -67,25 +90,39 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.pollingSubscription = interval(10000)
-      .pipe(switchMap(() => this.fetchData()))
+    this.inverterSub = interval(10000)
+      .pipe(switchMap(() => this.fetchInverterData()))
       .subscribe({
         next: (data) => {
-          this.data = data;
+          this.properties = data;
           this.setupGauges(data);
+        },
+        error: (err) => console.error('Error fetching properties:', err),
+      });
+
+    this.pricesSub = interval(10000 * 6) // every minute as these dont change often.
+      .pipe(switchMap(() => this.fetchAmberPrices()))
+      .subscribe({
+        next: (data) => {
+          this.amberPrices = data;
+          this.priceGraph = buildLineGraphPrices(data)
         },
         error: (err) => console.error('Error fetching properties:', err),
       });
   }
 
   ngOnDestroy(): void {
-    if (this.pollingSubscription) {
-      this.pollingSubscription.unsubscribe();
+    if (this.inverterSub) {
+      this.inverterSub.unsubscribe();
     }
   }
 
-  fetchData(): Observable<Array<Property>> {
-    return this.dataService.getData();
+  fetchInverterData(): Observable<Array<Property>> {
+    return this.dataService.getInverterProperties();
+  }
+
+  fetchAmberPrices(): Observable<Array<AmberPrice>> {
+    return this.dataService.getAmberPrices(getTimeString(-1), getTimeString(1));
   }
 
   buildBatterySOCGauge(prop: Property): void {
@@ -144,4 +181,51 @@ export class AppComponent implements OnInit, OnDestroy {
     };
     this.batteryCharge = updatedGauge;
   }
+
+}
+function buildLineGraphPrices(prices: Array<AmberPrice>): LineGraph {
+
+  const updates = new LineGraph();
+  updates.type = "bar"
+  updates.title = 'Amber Prices';
+  prices = prices.sort((a, b) => {
+    return new Date(a.startTime) > new Date(b.startTime) ? 1 : -1;
+  });
+  var generalPrices = prices.filter((price) => {
+    if (price.channelType === 'general') {
+      return price;
+    } return
+  });
+  var feedinPrices = prices.filter((price) => {
+    if (price.channelType === 'feedIn') {
+      return price;
+    } return
+  });
+
+
+
+  updates.series = [
+    {
+      name: 'Amber General Prices',
+      data: generalPrices.map((price) => {
+        return Math.round(price.perKwh) / 100
+      }),
+    },
+  ];
+  updates.series.push({
+    name: 'Amber Feedin Prices',
+    data: feedinPrices.map((price) => {
+      return Math.round(price.perKwh * -1) / 100
+    }),
+  });
+  updates.xaxis = {
+    type: 'datetime',
+    categories: generalPrices.map((price) => {
+      return price.startTime
+    }),
+  }
+
+
+  return updates
+
 }
