@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "myapp": {
+    "power-base": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,10 +13,12 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/myapp",
+            "outputPath": "dist/power-base",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": ["zone.js"],
+            "polyfills": [
+              "zone.js"
+            ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
@@ -28,7 +30,9 @@
               "node_modules/@fortawesome/fontawesome-free/css/all.css",
               "src/styles.css"
             ],
-            "scripts": ["node_modules/apexcharts/dist/apexcharts.min.js"]
+            "scripts": [
+              "node_modules/apexcharts/dist/apexcharts.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -72,7 +76,10 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": ["zone.js", "zone.js/testing"],
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
             "tsConfig": "tsconfig.spec.json",
             "assets": [
               {

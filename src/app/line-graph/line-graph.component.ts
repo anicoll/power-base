@@ -1,4 +1,10 @@
-import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import {
   NgApexchartsModule,
   ApexTitleSubtitle,
@@ -20,7 +26,6 @@ import { LineGraph } from '../model/line-graph.model';
   templateUrl: './line-graph.component.html',
   styleUrl: './line-graph.component.css',
 })
-
 export class LineGraphComponent implements OnChanges {
   @Input() data: LineGraph = new LineGraph();
   @ViewChild('chart') chart!: ChartComponent;
@@ -39,6 +44,9 @@ export class LineGraphComponent implements OnChanges {
   constructor() {
     this.chartOptions = newChartOptions(this.data);
   }
+  public updateSeries() {
+    this.chart.updateSeries(this.data.series);
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     console.log('Data received in LineGraphComponent', changes['data']);
@@ -48,7 +56,6 @@ export class LineGraphComponent implements OnChanges {
     }
   }
 }
-
 
 function newChartOptions(data: LineGraph): {
   series: ApexAxisChartSeries;

@@ -8,7 +8,7 @@ import { AmberPrice } from '../model/amber.model';
   providedIn: 'root',
 })
 export class DataService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getInverterProperties(): Observable<Array<Property>> {
     return this.http.get<Array<Property>>(
