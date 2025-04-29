@@ -22,7 +22,7 @@ export class GaugeComponent implements OnChanges {
     {};
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('Data received in GaugeComponent', changes['data']);
+    console.log('Data received in GaugeComponent');
     if (changes['data'] && changes['data'].currentValue) {
       const newData = changes['data'].currentValue;
       this.gaugeValue = newData.gaugeValue || 0;

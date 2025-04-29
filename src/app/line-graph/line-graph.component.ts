@@ -49,7 +49,7 @@ export class LineGraphComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('Data received in LineGraphComponent', changes['data']);
+    console.log('Data received in LineGraphComponent');
     if (changes['data'] && changes['data'].currentValue) {
       const newData = changes['data'].currentValue;
       this.chartOptions = newChartOptions(newData);
