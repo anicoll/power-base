@@ -2,20 +2,32 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
-    <h1>Hello, {{ title }}</h1>
+        <h1>Hello, {{ title }}</h1>
       </div>
     </div>
     <div class="row">
-      <div class="col-md-4 col-sm-6"><app-gauge [data]="batterySoc"> </app-gauge></div>
-      <div class="col-md-4 col-sm-6"><app-gauge [data]="batteryCharge"> </app-gauge></div>
-      <div class="col-md-4 col-sm-6"><app-gauge [data]="solarGeneration"> </app-gauge></div>
+      <div class="col-md-4 col-sm-6">
+        <app-gauge [data]="batterySoc"> </app-gauge>
+      </div>
+      <div class="col-md-4 col-sm-6">
+        <app-gauge [data]="batteryCharge"> </app-gauge>
+      </div>
+      <div class="col-md-4 col-sm-6">
+        <app-gauge [data]="solarGeneration"> </app-gauge>
+      </div>
     </div>
     <div class="row">
-      <div class="col-md-4 col-sm-6"><app-gauge [data]="powerDischarge"> </app-gauge></div>
-      <div class="col-md-4 col-sm-6"><app-gauge [data]="homeUsage"> </app-gauge></div>
+      <div class="col-md-4 col-sm-6">
+        <app-gauge [data]="powerDischarge"> </app-gauge>
+      </div>
+      <div class="col-md-4 col-sm-6">
+        <app-gauge [data]="homeUsage"> </app-gauge>
+      </div>
     </div>
 
-      <div class="col-12"><app-line-graph [data]="priceGraph"> </app-line-graph></div>
+    <div class="col-12">
+      <app-line-graph [data]="priceGraph"> </app-line-graph>
+    </div>
   </div>
 </main>
 <router-outlet />

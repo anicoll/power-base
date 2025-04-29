@@ -122,8 +122,6 @@ export class AppComponent implements OnInit, OnDestroy {
   fetchAmberPrices(): Observable<Array<AmberPrice>> {
     return this.dataService.getAmberPrices(getTimeString(-1), getTimeString(1));
   }
-
-
 }
 
 function buildBatterySOCGauge(prop: Property): Gauge {
@@ -233,13 +231,13 @@ function buildLineGraphPrices(prices: Array<AmberPrice>): LineGraph {
         return Math.round(price.perKwh) / 100;
       }),
     },
+    {
+      name: 'Amber Feedin Prices',
+      data: feedinPrices.map((price) => {
+        return Math.round(price.perKwh * -1) / 100;
+      }),
+    },
   ];
-  updates.series.push({
-    name: 'Amber Feedin Prices',
-    data: feedinPrices.map((price) => {
-      return Math.round(price.perKwh * -1) / 100;
-    }),
-  });
   updates.xaxis = {
     type: 'datetime',
     categories: generalPrices.map((price) => {
