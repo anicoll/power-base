@@ -36,8 +36,8 @@ export class AppComponent implements OnInit, OnDestroy {
   homeUsage: Gauge = new Gauge();
 
   priceGraph: LineGraph = new LineGraph();
+  forecastPriceGraph: LineGraph = new LineGraph();
   title = 'Power Base';
-  amberPrices: Array<any> = [];
 
   constructor(private dataService: DataService) {
     this.fetchInverterData().subscribe({
@@ -48,8 +48,8 @@ export class AppComponent implements OnInit, OnDestroy {
     });
     this.fetchAmberPrices().subscribe({
       next: (data) => {
-        this.amberPrices = data;
         this.priceGraph = buildLineGraphPrices(data);
+        this.forecastPriceGraph = buildLineGraphPrices(data, true);
       },
       error: (err) => console.error('Error fetching amber prices:', err),
     });
@@ -102,8 +102,8 @@ export class AppComponent implements OnInit, OnDestroy {
       .pipe(switchMap(() => this.fetchAmberPrices()))
       .subscribe({
         next: (data) => {
-          this.amberPrices = data;
           this.priceGraph = buildLineGraphPrices(data);
+          this.forecastPriceGraph = buildLineGraphPrices(data, true);
         },
         error: (err) => console.error('Error fetching properties:', err),
       });
@@ -204,25 +204,29 @@ function buildBatteryChargeGauge(props: Array<Property>): Gauge {
   };
   return updatedGauge;
 }
-function buildLineGraphPrices(prices: Array<AmberPrice>): LineGraph {
+function buildLineGraphPrices(prices: Array<AmberPrice>, forecast: boolean = false): LineGraph {
   const updates = new LineGraph();
   updates.type = 'bar';
-  updates.title = 'Amber Prices';
+  updates.title = forecast ? 'Forecast Prices' : 'Current Prices';
   prices = prices.sort((a, b) => {
     return new Date(a.startTime) > new Date(b.startTime) ? 1 : -1;
   });
+
   var generalPrices = prices.filter((price) => {
-    if (price.channelType === 'general') {
+    if (price.channelType === 'general' && price.forecast === forecast) {
       return price;
     }
     return;
   });
   var feedinPrices = prices.filter((price) => {
-    if (price.channelType === 'feedIn') {
+    if (price.channelType === 'feedIn' && price.forecast === forecast) {
       return price;
     }
     return;
   });
+
+  generalPrices = generalPrices.slice(0, 24);
+  feedinPrices = feedinPrices.slice(0, 24);
 
   updates.series = [
     {
@@ -241,7 +245,7 @@ function buildLineGraphPrices(prices: Array<AmberPrice>): LineGraph {
   updates.xaxis = {
     type: 'datetime',
     categories: generalPrices.map((price) => {
-      return price.startTime;
+      return formatDate(price.startTime, "yyyy-MM-dd'T'HH:mm:ss'Z'", 'en-AU', 'Australia/Adelaide');
     }),
   };
 
