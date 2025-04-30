@@ -6,6 +6,7 @@ import { Gauge, NgxGaugeType } from '../model/gauge.model';
   selector: 'app-gauge',
   imports: [NgxGaugeModule],
   templateUrl: './gauge.component.html',
+  styleUrls: ['./gauge.component.css'],
 })
 export class GaugeComponent implements OnChanges {
   @Input() data: Gauge = {} as Gauge;

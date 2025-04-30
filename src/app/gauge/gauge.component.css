@@ -1,0 +1,5 @@
+/* Assuming you want to style ngx-gauge and its child div elements */
+
+:host ::ng-deep ngx-gauge.ngx-gauge-meter > div.reading-block {
+  overflow: visible !important;
+}

@@ -1,0 +1,134 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-stats">
+          <div class="card-header card-header-info card-header-icon">
+            <div class="card-icon">
+              <app-gauge [data]="solarGeneration"></app-gauge>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="stats">
+              <i class="material-icons">solar_power</i> {{ solarGeneration.gaugeLabel }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-stats">
+          <div class="card-header card-header-info card-header-icon">
+            <div class="card-icon">
+              <app-gauge [data]="powerDischarge"></app-gauge>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="stats">
+              <i class="material-icons">electric_meter</i> {{ powerDischarge.gaugeLabel }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-stats">
+          <div class="card-header card-header-info card-header-icon">
+            <div class="card-icon">
+              <app-gauge [data]="batteryCharge"></app-gauge>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="stats">
+              <i class="material-icons">bolt</i> {{ batteryCharge.gaugeLabel }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-stats">
+          <div class="card-header card-header-info card-header-icon">
+            <div class="card-icon">
+              <app-gauge [data]="batterySoc"></app-gauge>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="stats">
+              <i class="material-icons">bolt</i> {{ batterySoc.gaugeLabel }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-stats">
+          <div class="card-header card-header-info card-header-icon">
+            <div class="card-icon">
+              <app-gauge [data]="homeUsage"></app-gauge>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="stats">
+              <i class="material-icons">home</i> {{ homeUsage.gaugeLabel }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-6">
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-6">
+
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-6">
+
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card card-chart">
+          <div class="card-header card-header-success">
+            <app-line-graph [data]="priceGraph"> </app-line-graph>
+          </div>
+          <div class="card-body">
+            <h4 class="card-title">{{ priceGraph.title }}</h4>
+            <!-- <p class="card-category">
+              <span class="text-success"
+                ><i class="fa fa-long-arrow-up"></i> 55%
+              </span>
+              increase in today sales.
+            </p> -->
+          </div>
+          <!-- <div class="card-footer">
+            <div class="stats">
+              <i class="material-icons">access_time</i> updated 4 minutes ago
+            </div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card card-chart">
+          <div class="card-header card-header-success">
+            <app-line-graph [data]="forecastPriceGraph"> </app-line-graph>
+          </div>
+          <div class="card-body">
+            <h4 class="card-title">{{ forecastPriceGraph.title }}</h4>
+            <!-- <p class="card-category">
+              <span class="text-success"
+                ><i class="fa fa-long-arrow-up"></i> 55%
+              </span>
+              increase in today sales.
+            </p> -->
+          </div>
+          <!-- <div class="card-footer">
+            <div class="stats">
+              <i class="material-icons">access_time</i> updated 4 minutes ago
+            </div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
