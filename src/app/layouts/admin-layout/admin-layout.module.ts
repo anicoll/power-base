@@ -12,8 +12,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
-
-import { LineGraphComponent } from '../../line-graph/line-graph.component';
+import { ChartistModule } from 'ng-chartist';
 
 @NgModule({
   imports: [
@@ -28,7 +27,7 @@ import { LineGraphComponent } from '../../line-graph/line-graph.component';
     MatSelectModule,
     MatTooltipModule,
     GaugeComponent,
-    LineGraphComponent,
+    ChartistModule,
   ],
 
   declarations: [DashboardComponent],

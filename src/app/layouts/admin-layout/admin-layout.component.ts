@@ -1,32 +1,8 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import {
-  formatDate,
-  Location,
-  LocationStrategy,
-  PathLocationStrategy,
-  PopStateEvent,
-} from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { Location, PopStateEvent } from '@angular/common';
 import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import PerfectScrollbar from 'perfect-scrollbar';
-import $ from 'jquery';
-import { filter, interval, Observable, Subscription, switchMap } from 'rxjs';
-import { SidebarComponent } from '../../components/sidebar/sidebar.component';
-import { DataService } from '../../shared/data.service';
-import { Gauge } from '../../model/gauge.model';
-import { LineGraph } from '../../model/line-graph.model';
-import { Property } from '../../model/property.model';
-import { AmberPrice } from '../../model/amber.model';
-
-// import { formatDate } from '@angular/common';
-// import { RouterOutlet } from '@angular/router';
-// import { GaugeComponent } from './gauge/gauge.component';
-// import { DataService } from './shared/data.service';
-// import { interval, Observable, Subscription, switchMap } from 'rxjs';
-// import { LineGraphComponent } from './line-graph/line-graph.component';
-// import { Property } from './model/property.model';
-// import { Gauge } from './model/gauge.model';
-// import { AmberPrice } from './model/amber.model';
-// import { LineGraph } from './model/line-graph.model';
+import { filter, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-admin-layout',
@@ -38,16 +14,7 @@ export class AdminLayoutComponent implements OnInit {
   private _router: Subscription = new Subscription();
   private lastPoppedUrl: string | undefined;
   private yScrollStack: number[] = [];
-  private inverterSub: Subscription | undefined;
-  private pricesSub: Subscription | undefined;
-  batterySoc: Gauge = new Gauge();
-  batteryCharge: Gauge = new Gauge();
-  solarGeneration: Gauge = new Gauge();
-  powerDischarge: Gauge = new Gauge();
-  homeUsage: Gauge = new Gauge();
 
-  priceGraph: LineGraph = new LineGraph();
-  forecastPriceGraph: LineGraph = new LineGraph();
   title = 'Power Base';
 
   constructor(
@@ -105,14 +72,7 @@ export class AdminLayoutComponent implements OnInit {
     }
   }
 
-  ngOnDestroy(): void {
-    if (this.inverterSub) {
-      this.inverterSub.unsubscribe();
-    }
-    if (this.pricesSub) {
-      this.pricesSub.unsubscribe();
-    }
-  }
+  ngOnDestroy(): void {}
 
   ngAfterViewInit() {
     this.runOnRouteChange();
