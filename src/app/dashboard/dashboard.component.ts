@@ -19,6 +19,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private pricesSub: Subscription | undefined;
   batterySoc: Gauge = new Gauge();
   batteryCharge: Gauge = new Gauge();
+  importedPower: Gauge = new Gauge();
   solarGeneration: Gauge = new Gauge();
   powerDischarge: Gauge = new Gauge();
   homeUsage: Gauge = new Gauge();
@@ -59,7 +60,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   fetchAmberPrices(): Observable<Array<AmberPrice>> {
-    return this.dataService.getAmberPrices(getTimeString(-1), getTimeString(1));
+    return this.dataService.getAmberPrices(getTimeString(-2), getTimeString(8));
   }
 
   setupGauges(data: Array<Property>): void {
@@ -80,14 +81,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
         continue;
       }
-      if (data[i].slug === 'total_active_power') {
+      if (data[i].slug === 'total_dc_power') {
         this.solarGeneration = buildSolarGeneration(data[i]);
         continue;
       }
-      if (data[i].slug === 'total_active_power') {
-        this.solarGeneration = buildSolarGeneration(data[i]);
+      if (data[i].slug === 'purchased_power') {
+        this.importedPower = buildImportGraph(data[i]);
         continue;
       }
+
       if (data[i].slug === 'total_export_active_power') {
         this.powerDischarge = buildPowerDischarge(data[i]);
         continue;
@@ -179,6 +181,17 @@ function buildSolarGeneration(prop: Property): Gauge {
   return updatedGauge;
 }
 
+function buildImportGraph(prop: Property): Gauge {
+  const updatedGauge = new Gauge();
+  updatedGauge.gaugeType = 'semi';
+  updatedGauge.gaugeValue = parseFloat(prop.value);
+  updatedGauge.gaugeMin = 0;
+  // updatedGauge.gaugeMax = 7;
+  updatedGauge.gaugeLabel = 'Import Power';
+  updatedGauge.gaugeAppendText = prop.unit_of_measurement;
+  return updatedGauge;
+}
+
 function buildPowerDischarge(prop: Property): Gauge {
   const updatedGauge = new Gauge();
   updatedGauge.gaugeType = 'semi';
@@ -231,13 +244,12 @@ function buildBatteryChargeGauge(props: Array<Property>): Gauge {
   return updatedGauge;
 }
 
-function getTimeString(days: number = 0): string {
+function getTimeString(hours: number = 0): string {
   const date = new Date();
-  if (days !== 0) {
-    date.setDate(date.getDate() + days);
+  if (hours !== 0) {
+    date.setHours(date.getHours() + hours);
   }
-
-  return formatDate(date, "yyyy-MM-dd'T'HH:mm:ss'Z'", 'en-AU', 'UTC');
+  return date.toISOString();
 }
 
 function getCurrentPrices(data: AmberPrice[]): string {
@@ -246,8 +258,11 @@ function getCurrentPrices(data: AmberPrice[]): string {
   const currentDate = new Date();
   data.forEach((price) => {
     const startTime = new Date(price.startTime);
-    const endTime = new Date(price.endTime);
-    if (startTime <= currentDate && endTime >= currentDate) {
+    if (
+      Math.abs(currentDate.getTime() - startTime.getTime()) <=
+      5 * 60 * 1000
+    ) {
+      // Start time is within 5 minutes of now
       if (price.channelType === 'general') {
         generalPrice = price;
       } else if (price.channelType === 'feedIn') {
@@ -283,6 +298,9 @@ function buildPriceGraph(
       }),
     } as BarChartOptions,
   } as Configuration;
+  prices = prices.sort((a, b) => {
+    return new Date(a.startTime) > new Date(b.startTime) ? 1 : -1;
+  });
 
   var generalPrices = prices.filter((price) => {
     if (price.channelType === 'general' && price.forecast === forecast) {
@@ -325,7 +343,7 @@ function buildPriceGraph(
       price.startTime,
       'HH:mm',
       'en-AU',
-      'Australia/Adelaide',
+      // 'Australia/Adelaide',
     );
     return date;
   });
